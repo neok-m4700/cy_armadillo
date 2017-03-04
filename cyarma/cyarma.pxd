@@ -134,17 +134,17 @@ cdef extern from "armadillo" namespace "arma" nogil:
     cdef bool qr(mat Q, mat R, mat X) nogil
     cdef float dot(vec a, vec b) nogil
 
-cdef mat * numpy_to_mat(np.ndarray[np.double_t, ndim=2] X)
+cdef mat * numpy_to_mat(double[:, :] X)
 
-cdef mat numpy_to_mat_d(np.ndarray[np.double_t, ndim=2] X)
+cdef mat numpy_to_mat_d(double[:, :] X)
 
-cdef cube * numpy_to_cube(np.ndarray[np.double_t, ndim=3] X)
+cdef cube * numpy_to_cube(double[:, :, :] X)
 
-cdef cube numpy_to_cube_d(np.ndarray[np.double_t, ndim=3] X)
+cdef cube numpy_to_cube_d(double[:, :, :] X)
 
-cdef vec * numpy_to_vec(np.ndarray[np.double_t, ndim=1] x)
+cdef vec * numpy_to_vec(double[:] x)
 
-cdef vec numpy_to_vec_d(np.ndarray[np.double_t, ndim=1] x)
+cdef vec numpy_to_vec_d(double[:] x)
 
 cdef vec * mat_col_view(mat * x, int col) nogil
 
@@ -154,6 +154,6 @@ cdef mat * cube_slice_view(cube * x, int slice) nogil
 
 cdef mat cube_slice_view_d(cube * x, int slice) nogil
 
-cdef np.ndarray[np.double_t, ndim=2] mat_to_numpy(const mat & X, np.ndarray[np.double_t, ndim=2] D)
+cdef double[:, :] mat_to_numpy(const mat & X, double[:, :] D)
 
-cdef np.ndarray[np.double_t, ndim=1] vec_to_numpy(const vec & X, np.ndarray[np.double_t, ndim=1] D)
+cdef double[:] vec_to_numpy(const vec & X, double[:] D)

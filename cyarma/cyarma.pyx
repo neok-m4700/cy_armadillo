@@ -145,38 +145,38 @@ cdef extern from "armadillo" namespace "arma" nogil:
 ## TODO: refactor to return pointer, but other function derefed. 
 
 ##### Tools to convert numpy arrays to armadillo arrays ######
-cdef mat * numpy_to_mat(np.ndarray[np.double_t, ndim=2] X):
+cdef mat * numpy_to_mat(double[:, :] X):
     if not (X.flags.f_contiguous or X.flags.owndata):
         X = X.copy(order="F")
     cdef mat *aR_p  = new mat(<double*> X.data, X.shape[0], X.shape[1], False, True)
     return aR_p
 
-cdef mat numpy_to_mat_d(np.ndarray[np.double_t, ndim=2] X):
+cdef mat numpy_to_mat_d(double[:, :] X):
     cdef mat * aR_p = numpy_to_mat(X)
     cdef mat aR = deref(aR_p)
     del aR_p
     return aR
 
-cdef cube * numpy_to_cube(np.ndarray[np.double_t, ndim=3] X):
+cdef cube * numpy_to_cube(double[:, :, :] X):
     cdef cube *aR_p
     if not X.flags.c_contiguous:
         raise ValueError("For Cube, numpy array must be C contiguous")
     aR_p  = new cube(<double*> X.data, X.shape[2], X.shape[1], X.shape[0], False, True)
     return aR_p
 
-cdef cube numpy_to_cube_d(np.ndarray[np.double_t, ndim=3] X):
+cdef cube numpy_to_cube_d(double[:, :, :] X):
     cdef cube * aR_p = numpy_to_cube(X)
     cdef cube aR = deref(aR_p)
     del aR_p
     return aR
     
-cdef vec * numpy_to_vec(np.ndarray[np.double_t, ndim=1] x):
+cdef vec * numpy_to_vec(double[:] x):
     if not (x.flags.f_contiguous or x.flags.owndata):
         x = x.copy()
     cdef vec *ar_p = new vec(<double*> x.data, x.shape[0], False, True)
     return ar_p
 
-cdef vec numpy_to_vec_d(np.ndarray[np.double_t, ndim=1] x):
+cdef vec numpy_to_vec_d(double[:] x):
     cdef vec *ar_p = numpy_to_vec(x)
     cdef vec ar = deref(ar_p)
     del ar_p
@@ -211,7 +211,7 @@ cdef mat cube_slice_view_d(cube * x, int slice) nogil:
 # all data will be copied since numpy doesn't own the data and can't clean up
 # otherwise. Maybe this can be improved. #######
 @cython.boundscheck(False)
-cdef np.ndarray[np.double_t, ndim=2] mat_to_numpy(const mat & X, np.ndarray[np.double_t, ndim=2] D):
+cdef double[:, :] mat_to_numpy(const mat & X, double[:, :] D):
     cdef const double * Xptr = X.memptr()
     
     if D is None:
@@ -222,7 +222,7 @@ cdef np.ndarray[np.double_t, ndim=2] mat_to_numpy(const mat & X, np.ndarray[np.d
     return D
 
 @cython.boundscheck(False)
-cdef np.ndarray[np.double_t, ndim=1] vec_to_numpy(const vec & X, np.ndarray[np.double_t, ndim=1] D):
+cdef double[:] vec_to_numpy(const vec & X, double[:] D):
     cdef const double * Xptr = X.memptr()
     
     if D is None:
